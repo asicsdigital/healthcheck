@@ -56,6 +56,7 @@ func healthcheckHandler(hc *healthcheck, c *config) func(http.ResponseWriter, *h
 
 		b, _ := json.Marshal(*hc)
 
+		w.WriteHeader(hc.Status)
 		w.Write(b)
 	}
 }
