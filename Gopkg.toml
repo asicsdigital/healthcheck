@@ -32,3 +32,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/thoas/stats"
+
+[[constraint]]
+  name = "github.com/caarlos0/env"
+  version = "3.3.0"

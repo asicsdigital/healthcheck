@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/caarlos0/env"
+  packages = ["."]
+  revision = "1cddc31c48c56ecd700d873edb9fd5b6f5df922a"
+  version = "v3.3.0"
+
+[[projects]]
   branch = "master"
   name = "github.com/thoas/stats"
   packages = ["."]
@@ -16,6 +22,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "a96c557a059b323d40c056b69da3439cfb0be8c0eaf1b4a1de12d5fef4c8a2c4"
+  inputs-digest = "63f254e464eedaa701fe5ade4c49d24db411b0e973df4fbb366c468478176267"
   solver-name = "gps-cdcl"
   solver-version = 1
