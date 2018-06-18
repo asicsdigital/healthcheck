@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/caarlos0/env"
-	"github.com/thoas/stats"
 	"github.com/urfave/negroni"
 )
 
@@ -34,9 +33,8 @@ func main() {
 	// middleware - config
 	n.Use(negroni.HandlerFunc(configHandler(&cfg)))
 
-	// middleware - stats
-	middlewareStats := stats.New()
-	mux.HandleFunc("/stats", statsHandler(middlewareStats))
+	// middleware - static file serving
+	n.Use(negroni.NewStatic(http.Dir("./static")))
 
 	// middleware - healthcheck
 	mux.HandleFunc("/healthcheck", healthcheckHandler(&hc, &cfg))
@@ -57,18 +55,6 @@ func healthcheckHandler(hc *healthcheck, c *config) func(http.ResponseWriter, *h
 		b, _ := json.Marshal(*hc)
 
 		w.WriteHeader(hc.Status)
-		w.Write(b)
-	}
-}
-
-func statsHandler(s *stats.Stats) func(http.ResponseWriter, *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-
-		stats := s.Data()
-
-		b, _ := json.Marshal(stats)
-
 		w.Write(b)
 	}
 }

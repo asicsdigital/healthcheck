@@ -1,0 +1,102 @@
+{
+  "$id": "http://app.prod.asics.digital/healthcheck",
+  "type": "object",
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "application": {
+      "$id": "/properties/application",
+      "type": "string",
+      "title": "The Application Schema ",
+      "default": "",
+      "examples": [
+        "asics-studio"
+      ]
+    },
+    "status": {
+      "$id": "/properties/status",
+      "type": "integer",
+      "title": "The Status Schema ",
+      "default": 0,
+      "examples": [
+        200
+      ]
+    },
+    "metrics": {
+      "$id": "/properties/metrics",
+      "type": "object",
+      "properties": {
+        "ci": {
+          "$id": "/properties/metrics/properties/ci",
+          "type": "object",
+          "properties": {
+            "githubHash": {
+              "$id": "/properties/metrics/properties/ci/properties/githubHash",
+              "type": "string",
+              "title": "The Githubhash Schema ",
+              "default": "",
+              "examples": [
+                "b6e534c4cbcad514c3d48a7d44172b7cfb3a5611"
+              ]
+            },
+            "compareUrl": {
+              "$id": "/properties/metrics/properties/ci/properties/compareUrl",
+              "type": "string",
+              "title": "The Compareurl Schema ",
+              "default": "",
+              "examples": [
+                "https://github.com/asicsdigital/asics-studio-server/compare/0b5e27dc8505...b6e534c4cbca"
+              ]
+            },
+            "buildTime": {
+              "$id": "/properties/metrics/properties/ci/properties/buildTime",
+              "type": "string",
+              "title": "The Buildtime Schema ",
+              "default": "",
+              "examples": [
+                "2018-06-14 14:45:38+00:00"
+              ]
+            }
+          }
+        },
+        "checks": {
+          "$id": "/properties/metrics/properties/checks",
+          "type": "array",
+          "items": {
+            "$id": "/properties/metrics/properties/checks/items",
+            "type": "object",
+            "properties": {
+              "checkName": {
+                "$id": "/properties/metrics/properties/checks/items/properties/checkName",
+                "type": "string",
+                "title": "The Checkname Schema ",
+                "default": "",
+                "examples": [
+                  "checkS3Audio"
+                ]
+              },
+              "errorCount": {
+                "$id": "/properties/metrics/properties/checks/items/properties/errorCount",
+                "type": "integer",
+                "title": "The Errorcount Schema ",
+                "default": 0,
+                "examples": [
+                  0
+                ]
+              },
+              "successCount": {
+                "$id": "/properties/metrics/properties/checks/items/properties/successCount",
+                "type": "integer",
+                "title": "The Successcount Schema ",
+                "default": 0,
+                "examples": [
+                  216
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
