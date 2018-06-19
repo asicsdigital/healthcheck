@@ -26,6 +26,9 @@ func main() {
 	cfg := config{}
 	hc := healthcheck{}
 
+	// default config for our own healthcheck
+	defcfg := config{Application: "healthcheck", Status: 200, Metrics: "{}"}
+
 	mux := http.NewServeMux()
 
 	n := negroni.Classic()
@@ -36,8 +39,11 @@ func main() {
 	// middleware - static file serving
 	n.Use(negroni.NewStatic(http.Dir("./static")))
 
-	// middleware - healthcheck
+	// middleware - healthcheck (dynamic)
 	mux.HandleFunc("/healthcheck", healthcheckHandler(&hc, &cfg))
+
+	// middleware - healthcheck (static)
+	mux.HandleFunc("/static-hc", healthcheckHandler(&hc, &defcfg))
 
 	n.UseHandler(mux)
 
