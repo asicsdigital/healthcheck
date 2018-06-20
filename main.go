@@ -9,6 +9,9 @@ import (
 	"github.com/urfave/negroni"
 )
 
+const GitHubURI string = "https://github.com/asicsdigital/healthcheck"
+const HealthCheckPath string = "/healthcheck"
+
 type config struct {
 	Port        int    `env:"PORT"`
 	Application string `env:"HEALTHCHECK_APP" envDefault:"healthcheck"`
@@ -40,14 +43,32 @@ func main() {
 	n.Use(negroni.NewStatic(http.Dir("./static")))
 
 	// middleware - healthcheck (dynamic)
-	mux.HandleFunc("/healthcheck", healthcheckHandler(&hc, &cfg))
+	mux.HandleFunc(HealthCheckPath, healthcheckHandler(&hc, &cfg))
 
 	// middleware - healthcheck (static)
 	mux.HandleFunc("/static-hc", healthcheckHandler(&hc, &defcfg))
 
+	// middleware - redirect readme to GitHub
+	mux.HandleFunc("/readme", redirectHandler(GitHubURI, http.StatusMovedPermanently))
+
+	// middleware - redirect / to /healthcheck
+	mux.HandleFunc("/", redirectHandler(HealthCheckPath, http.StatusMovedPermanently))
+
 	n.UseHandler(mux)
 
 	n.Run()
+}
+
+func redirectHandler(target string, code int) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		// redirect if code is 3xx
+		if 300 <= code && code < 400 {
+			http.Redirect(w, r, target, code)
+		} else {
+			panic(fmt.Sprintf("provided code %d is not in the 3xx range", code))
+		}
+	}
 }
 
 func healthcheckHandler(hc *healthcheck, c *config) func(http.ResponseWriter, *http.Request) {
