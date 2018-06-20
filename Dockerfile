@@ -13,6 +13,8 @@ RUN mkdir -p static
 COPY --from=0 /go/src/github.com/asicsdigital/healthcheck/static ./static
 ENV PORT=8080
 ENV CONSUL_PREFIX=healthcheck
+ENV CONSUL_HTTP_ADDR=""
+ENV CONSUL_HTTP_AUTH=""
 ENV EXTRA_ARGS=""
 EXPOSE $PORT
 COPY ./scripts/envconsul_wrapper.sh wrapper.sh

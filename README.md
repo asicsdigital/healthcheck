@@ -48,7 +48,8 @@ In one shell:
 $ docker pull asicsdigital/healthcheck:latest
 $ docker run --rm -it \
   -p 8080 \
-  -e EXTRA_ARGS="-consul-addr=https://asics-services.us-east-1.dev.asics.digital -consul-auth=consul:GET_THIS_FROM_1PASSWORD" \
+  -e CONSUL_HTTP_ADDR="https://asics-services.us-east-1.dev.asics.digital" \
+  -e CONSUL_HTTP_AUTH="consul:GET_THIS_FROM_1PASSWORD" \
   asicsdigital/healthcheck:latest
 ```
 
