@@ -20,9 +20,9 @@ type config struct {
 }
 
 type healthcheck struct {
-	Application string `json:"application"`
-	Status      int    `json:"status"`
-	Metrics     string `json:"metrics"`
+	Application string                 `json:"application"`
+	Status      int                    `json:"status"`
+	Metrics     map[string]interface{} `json:"metrics"`
 }
 
 func main() {
@@ -77,7 +77,7 @@ func healthcheckHandler(hc *healthcheck, c *config) func(http.ResponseWriter, *h
 
 		hc.Application = c.Application
 		hc.Status = c.Status
-		hc.Metrics = c.Metrics
+		hc.Metrics = parseMetrics(c.Metrics)
 
 		b, _ := json.Marshal(*hc)
 
@@ -96,4 +96,17 @@ func configHandler(c *config) func(http.ResponseWriter, *http.Request, http.Hand
 
 		next(w, r)
 	}
+}
+
+func parseMetrics(unparsed string) map[string]interface{} {
+	var f interface{}
+	err := json.Unmarshal([]byte(unparsed), &f)
+
+	if err != nil {
+		panic(fmt.Sprintf("%s: %s", err, unparsed))
+	}
+
+	parsed := f.(map[string]interface{})
+
+	return parsed
 }
