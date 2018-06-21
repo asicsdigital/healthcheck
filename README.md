@@ -35,10 +35,10 @@ There are several ways to start up this reference implementation for testing or 
 ### Our publically-hosted endpoint
 
 ```sh
-$ curl https://healthcheck.dev.asics.digital/healthcheck | jq .
+$ curl https://healthcheck.staging.asics.digital/healthcheck | jq .
 ```
 
-To change the values, access the us-east-1 dev Consul cluster at https://asics-services.us-east-1.dev.asics.digital and modify the entries under `healthcheck/` in the key/value store.  Changes will be reflected in the endpoint immediately.
+To change the values, access the us-east-1 staging Consul cluster at https://asics-services.us-east-1.staging.asics.digital and modify the entries under `healthcheck/` in the key/value store.  Changes will be reflected in the endpoint immediately.
 
 ### Local Docker
 
@@ -48,7 +48,7 @@ In one shell:
 $ docker pull asicsdigital/healthcheck:latest
 $ docker run --rm -it \
   -p 8080 \
-  -e CONSUL_HTTP_ADDR="https://asics-services.us-east-1.dev.asics.digital" \
+  -e CONSUL_HTTP_ADDR="https://asics-services.us-east-1.staging.asics.digital" \
   -e CONSUL_HTTP_AUTH="consul:GET_THIS_FROM_1PASSWORD" \
   asicsdigital/healthcheck:latest
 ```
@@ -69,7 +69,7 @@ In one shell:
 $ go get github.com/asicsdigital/healthcheck
 $ cd ~/go/src/github.com/asicsdigital/healthcheck
 $ go build
-$ HEALTHCHECK_APP=my_app HEALTHCHECK_STATUS=500 HEALTHCHECK_METRICS="everything is terrible" ./healthcheck
+$ HEALTHCHECK_APP=my_app HEALTHCHECK_STATUS=500 HEALTHCHECK_METRICS='{"everything":"terrible"}' ./healthcheck
 ```
 
 In another shell:
