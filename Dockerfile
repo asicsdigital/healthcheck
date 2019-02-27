@@ -19,6 +19,9 @@ ENV CONSUL_PREFIX=healthcheck
 ENV CONSUL_HTTP_ADDR=""
 ENV CONSUL_HTTP_AUTH=""
 ENV EXTRA_ARGS=""
+#ENV HONEYCOMB_API_KEY="ce8f58cf494fa93b7376d053c577a894"
+#ENV HONEYCOMB_DATASET="healthcheck"
+
 EXPOSE $PORT
 COPY ./scripts/envconsul_wrapper.sh wrapper.sh
 CMD ["./wrapper.sh"]
