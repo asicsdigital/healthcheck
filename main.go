@@ -20,7 +20,7 @@ type config struct {
 	Application  string `env:"HEALTHCHECK_APP" envDefault:"healthcheck"`
 	Status       int    `env:"HEALTHCHECK_STATUS" envDefault:"200"`
 	Metrics      string `env:"HEALTHCHECK_METRICS" envDefault:"{}"`
-	HoneyKey     string `env:"HONEYCOMB_API_KEY" envDefault:"ce8f58cf494fa93b7376d053c577a894"`
+	HoneyKey     string `env:"HONEYCOMB_API_KEY"`
 	HoneyDataset string `env:"HONEYCOMB_DATASET" envDefault:"healthcheck"`
 }
 
