@@ -7,17 +7,23 @@ import (
 
 	"github.com/caarlos0/env"
 	"github.com/urfave/negroni"
+
+  beeline "github.com/honeycombio/beeline-go"
+	"github.com/honeycombio/beeline-go/wrappers/hnynethttp"
 )
 
 const GitHubURI string = "https://github.com/asicsdigital/healthcheck"
 const HealthCheckPath string = "/healthcheck"
 
 type config struct {
-	Port        int    `env:"PORT"`
-	Application string `env:"HEALTHCHECK_APP" envDefault:"healthcheck"`
-	Status      int    `env:"HEALTHCHECK_STATUS" envDefault:"200"`
-	Metrics     string `env:"HEALTHCHECK_METRICS" envDefault:"{}"`
+	Port         int    `env:"PORT"`
+	Application  string `env:"HEALTHCHECK_APP" envDefault:"healthcheck"`
+	Status       int    `env:"HEALTHCHECK_STATUS" envDefault:"200"`
+	Metrics      string `env:"HEALTHCHECK_METRICS" envDefault:"{}"`
+	HoneyKey     string `env:"HONEYCOMB_API_KEY"`
+	HoneyDataset string `env:"HONEYCOMB_DATASET" envDefault:"healthcheck"`
 }
+
 
 type healthcheck struct {
 	Application string                 `json:"application"`
@@ -27,10 +33,19 @@ type healthcheck struct {
 
 func main() {
 	cfg := config{}
+  env.Parse(&cfg)
+
 	hc := healthcheck{}
 
 	// default config for our own healthcheck
-	defcfg := config{Application: "healthcheck", Status: 200, Metrics: "{}"}
+	defcfg := config{Application: "healthcheck", Status: 200, Metrics: "{}" }
+
+	beeline.Init(beeline.Config{
+			WriteKey: cfg.HoneyKey,
+			Dataset: cfg.HoneyDataset,
+	})
+	defer beeline.Close()
+
 
 	mux := http.NewServeMux()
 
@@ -54,7 +69,7 @@ func main() {
 	// middleware - redirect / to /healthcheck
 	mux.HandleFunc("/", redirectHandler(HealthCheckPath, http.StatusMovedPermanently))
 
-	n.UseHandler(mux)
+	n.UseHandler(hnynethttp.WrapHandler(mux))
 
 	n.Run()
 }

@@ -47,7 +47,7 @@ In one shell:
 ```sh
 $ docker pull asicsdigital/healthcheck:latest
 $ docker run --rm -it \
-  -p 8080 \
+  -p 8080:8080 \
   -e CONSUL_HTTP_ADDR="https://asics-services.us-east-1.staging.asics.digital" \
   -e CONSUL_HTTP_AUTH="consul:GET_THIS_FROM_1PASSWORD" \
   asicsdigital/healthcheck:latest
@@ -57,6 +57,20 @@ In another shell:
 
 ```sh
 curl http://localhost:8080/healthcheck | jq .
+```
+
+You can also pass in a VAULT_TOKEN and a VAULT_ADDR to this example to read secrets from Vault.
+
+( Someone will have had to have run `vault write secret/healthcheck HONEYCOMB_API_KEY=<KEY` at some point, check your vault )
+
+```sh
+docker run --rm -it \
+  -p 8080:8080 \
+  -e CONSUL_HTTP_ADDR="https://asics-services.us-east-1.staging.asics.digital" \
+  -e CONSUL_HTTP_AUTH="consul:GET_THIS_FROM_1PASSWORD" \
+  -e VAULT_ADDR="https://vault.us-east-1.staging.asics.digital" \
+  -e VAULT_TOKEN='<A VAULT TOKEN>' \
+  asicsdigital/healthcheck:latest
 ```
 
 ### Build from source
